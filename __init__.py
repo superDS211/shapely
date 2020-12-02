@@ -1,0 +1,1 @@
+from .shapely import shape
