@@ -6,10 +6,10 @@ authors = ["Venky Iyer <indigoviolet@gmail.com>"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
-attrs = "^20.3.0"
+attrs = ">=20.3.0"
 
 [tool.poetry.dev-dependencies]
-mypy = "^0.790"
+mypy = ">=0.790"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
