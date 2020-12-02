@@ -43,7 +43,10 @@ class Shape:
     def _parse(self, arg, maxlen) -> Any:
         t = type(arg)
         if t is dict:
-            return {k: self._parse(v, maxlen) for k, v in arg.items()}
+            return (
+                f"D({len(arg)})",
+                {k: self._parse(v, maxlen) for k, v in list(arg.items())[:maxlen]},
+            )
         elif t is tuple or (t is list and maxlen >= len(arg)):
             return t(self._parse(v, maxlen) for v in arg)
         elif t is list and maxlen <= len(arg):
