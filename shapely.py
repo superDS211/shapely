@@ -1,11 +1,13 @@
 from __future__ import annotations
-from typing import Any, Dict, List, Tuple, Union
-import attr
-from operator import mul
+
 from functools import reduce
+from operator import mul
+from typing import Any, Dict, List, Tuple, Union
+
+import attr
 
 
-@attr.s(auto_attribs=True, eq=False)
+@attr.s(auto_attribs=True, eq=False, repr=False)
 class Shape:
     value: Any = attr.ib(repr=False)
     maxlen: int = 3
@@ -34,11 +36,8 @@ class Shape:
         assert len(self._tensors) == 1, "Cannot get tensor_shape for multi-tensor shape"
         return list(self._tensors.values())[0][0]
 
-    def dump(self):
-        return self._parsed
-
-    def __str__(self):
-        return repr(self.dump())
+    def __repr__(self):
+        return repr(self._parsed)
 
     def _parse(self, arg, maxlen) -> Any:
         t = type(arg)
