@@ -2,20 +2,23 @@ from __future__ import annotations
 
 from functools import reduce
 from operator import mul
-from typing import Any, Dict, List, Tuple, Union
+from typing import Any, ClassVar, Dict, List, Optional, Tuple
 
 import attr
 
 
 @attr.s(auto_attribs=True, eq=False, repr=False)
 class Shape:
+    # This constant exists so that we can override the default behavior from "outside"
+    MAXLEN: ClassVar[int] = 6
+
     value: Any = attr.ib(repr=False)
-    maxlen: int = 3
+    maxlen: Optional[int] = MAXLEN
     _tensors: Dict[int, Tuple[List[int], int]] = attr.ib(factory=dict, init=False)
     _parsed: Any = attr.ib(init=False)
 
     def __attrs_post_init__(self):
-        self._parsed = self._parse(self.value, maxlen=self.maxlen)
+        self._parsed = self._parse(self.value, maxlen=(self.maxlen or self.MAXLEN))
 
     def _get_torch_size_as_list(self, arg) -> List[int]:
         return [-1] + list(arg[1:]) if len(arg) > 3 else list(arg)
@@ -39,7 +42,7 @@ class Shape:
     def __repr__(self):
         return repr(self._parsed)
 
-    def _parse(self, arg, maxlen) -> Any:
+    def _parse(self, arg, maxlen: int) -> Any:
         t = type(arg)
         if t is dict:
             return (
@@ -72,5 +75,5 @@ def classname(arg) -> str:
     return f"{arg.__class__.__module__}.{arg.__class__.__qualname__}"
 
 
-def shape(arg, maxlen=3) -> Shape:
+def shape(arg, maxlen: Optional[int] = None) -> Shape:
     return Shape(arg, maxlen=maxlen)
