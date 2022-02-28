@@ -4,24 +4,21 @@ from functools import reduce
 from operator import mul
 from typing import Any, ClassVar, Dict, List, Optional, Tuple
 
-import attr
+from dataclasses import dataclass, field
 
 
-@attr.s(auto_attribs=True, eq=False, repr=False)
+@dataclass(eq=False, repr=False)
 class Shape:
     # This constant exists so that we can override the default behavior from "outside"
     MAXLEN: ClassVar[int] = 6
 
-    value: Any = attr.ib(repr=False)
+    value: Any = field(repr=False)
     maxlen: Optional[int] = MAXLEN
-    _tensors: Dict[int, Tuple[List[int], int]] = attr.ib(factory=dict, init=False)
-    _parsed: Any = attr.ib(init=False)
+    _tensors: Dict[int, Tuple[List[int], int]] = field(default_factory=dict, init=False)
+    _parsed: Any = field(init=False)
 
-    def __attrs_post_init__(self):
+    def __post_init__(self):
         self._parsed = self._parse(self.value, maxlen=(self.maxlen or self.MAXLEN))
-
-    def _get_torch_size_as_list(self, arg) -> List[int]:
-        return [-1] + list(arg[1:]) if len(arg) > 3 else list(arg)
 
     def _get_tensor_size(self, sp: List[int]) -> int:
         return abs(reduce(mul, sp))
@@ -58,7 +55,7 @@ class Shape:
             # we will not capture all tensors
             s = arg.shape
             if len(s):
-                sz_lst = self._get_torch_size_as_list(s)
+                sz_lst = list(s)
                 # key by id() so that we can later uniquify
                 self._tensors[id(arg)] = (sz_lst, self._get_tensor_size(sz_lst))
                 return sz_lst
@@ -75,5 +72,5 @@ def classname(arg) -> str:
     return f"{arg.__class__.__module__}.{arg.__class__.__qualname__}"
 
 
-def shape(arg, maxlen: Optional[int] = None) -> Shape:
+def shape(*arg, maxlen: Optional[int] = None) -> Shape:
     return Shape(arg, maxlen=maxlen)
