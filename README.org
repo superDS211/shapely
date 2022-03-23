@@ -1,13 +1,21 @@
-Shapely produces compact human-readable representations of nested
-collections, with some special treatment for tensors, numpy arrays etc.
+:PROPERTIES:
+:header-args: :session README :kernel shapely :results raw drawer replace
+:END:
+
+Shapely produces compact human-readable representations of nested collections,
+with some special treatment for tensors, numpy arrays etc.
 
 * Usage:
 
-#+BEGIN_SRC python 
+#+begin_src jupyter-python
 
->>> from shapely import shape
->>> coll = [list(range(100)), {i:(i+1) for i in range(25)}]
->>> print(shape(coll))
-[('L(100)', [0, 1, 2]), ('D(25)', {0: 1, 1: 2, 2: 3})]
+from shapely import shape, Shape
+Shape.MAXLEN = 3
 
-#+END_SRC
+coll = [list(range(100)), {i:(i+1) for i in range(25)}]
+print(shape(coll))
+
+#+end_src
+
+#+RESULTS:
+: ([('L(100)', [0, 1, 2]), ('D(25)', {0: 1, 1: 2, 2: 3})],)
