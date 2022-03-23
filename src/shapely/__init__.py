@@ -1,1 +1,1 @@
-from .shapely import shape, Shape
+from .shape import shape, Shape
