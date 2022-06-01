@@ -1,3 +1,3 @@
-from .shape import shape, Shape
+from .shape import ShapeParser, shape
 
-__all__ = ["shape", "Shape"]
+__all__ = ["shape", "ShapeParser"]
