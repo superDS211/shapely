@@ -1,3 +1,21 @@
-from .shape import ShapeParser, shape
+from .shape import (
+    ClassShape,
+    DictShape,
+    ListShape,
+    Shape,
+    ShapeParser,
+    ShortCollectionShape,
+    TensorShape,
+    shape,
+)
 
-__all__ = ["shape", "ShapeParser"]
+__all__ = [
+    "ClassShape",
+    "DictShape",
+    "ListShape",
+    "Shape",
+    "ShapeParser",
+    "ShortCollectionShape",
+    "TensorShape",
+    "shape",
+]
